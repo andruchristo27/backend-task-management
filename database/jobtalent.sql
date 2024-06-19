@@ -37,12 +37,12 @@ CREATE TABLE users (
 );
 
 CREATE TABLE categories (
-    category_id INT PRIMARY KEY,
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
     category_name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE providers (
-    provider_id INT PRIMARY KEY,
+    provider_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     provider_name VARCHAR(100) NOT NULL,
     description TEXT,
@@ -52,13 +52,14 @@ CREATE TABLE providers (
     category_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
+    status ENUM('active', 'inactive')
 );
 
 CREATE TABLE appointments (
-    appointment_id INT PRIMARY KEY,
+    appointment_id INT PRIMARY KEY AUTO_INCREMENT,
     seeker_id INT,
     provider_id INT,
-    appointment_date TIMESTAMP NOT NULL,
+    appointment_date DATE NOT NULL,
     status ENUM('pending', 'confirmed', 'completed', 'cancelled'),
     created_at TIMESTAMP,
     FOREIGN KEY (seeker_id) REFERENCES users(id),
@@ -66,7 +67,7 @@ CREATE TABLE appointments (
 );
 
 CREATE TABLE messages (
-    message_id INT PRIMARY KEY,
+    message_id INT PRIMARY KEY AUTO_INCREMENT,
     sender_id INT,
     receiver_id INT,
     content TEXT NOT NULL,
@@ -76,7 +77,7 @@ CREATE TABLE messages (
 );
 
 CREATE TABLE posts (
-    post_id INT PRIMARY KEY,
+    post_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     content TEXT NOT NULL,
     created_at TIMESTAMP,
@@ -84,7 +85,7 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE comments (
-    comment_id INT PRIMARY KEY,
+    comment_id INT PRIMARY KEY AUTO_INCREMENT,
     post_id INT,
     user_id INT,
     content TEXT NOT NULL,
@@ -94,7 +95,7 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE likes (
-    like_id INT PRIMARY KEY,
+    like_id INT PRIMARY KEY AUTO_INCREMENT,
     post_id INT,
     user_id INT,
     created_at TIMESTAMP,
