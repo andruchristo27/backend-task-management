@@ -13,7 +13,7 @@ const testConnection = async () => {
     await db.getConnection()
     console.log("Berhasil");
   } catch (e) {
-    console.log("GAGAL")
+    console.log("KONEKSI GAGAL")
   }
 }
 
@@ -22,7 +22,7 @@ const query = async (query, value) => {
     const [result] = await db.query(query, value ?? [])
     return result
   } catch (e) {
-    console.log("GAGAL")
+    console.log("QUERY GAGAL")
   }
 }
 

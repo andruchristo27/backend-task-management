@@ -1,12 +1,17 @@
 import { query } from "../database/db.js"
 
-export const getUser = async (req, res) => {
-    // const query = "SELECT * FROM users";
-    // db.query(query, (err, data) => {
-    //     if (err) return res.json(err);
-    //     return res.json(data);
-    // });
+export const insertUser = async (req, res) => {
+    const { nama, username, email, password, avatar } = req.body
+    try {
+        await query("INSERT INTO users (name, username, email, password, avatar) values (?,?,?,?)", [nama, username, email, password, avatar])
+        return res.status(200).json({ msg: "Siswa Ditambahkan" })
+    } catch (error) {
+        console.log("Terjadi kesalahan", e)
+        return res.status(500).json({ msg: "terjadi kesalahan pada server" })
+    }
+}
 
+export const getUser = async (req, res) => {
     try {
         const result = await query('Select * from users')
         return res.status(200).json({ success: true, data: result })
@@ -16,59 +21,27 @@ export const getUser = async (req, res) => {
     }
 }
 
-export const insertSiswa = async (req, res) => {
-    const { nama } = req.body
+export const updateUser = async (req, res) => {
+    const { id } = req.params
+    const { name, username, email, avatar } = req.body
     try {
-        await query("INSERT INTO siswa(nama) values (?)", [nama])
-        return res.status(200).json({ msg: "Siswa Ditambahkan" })
+        await query(
+            "UPDATE users SET name = ?, username = ?, email = ?, avatar = ? WHERE id = ?",
+            [name, username, email, avatar, id]
+        );
+        return res.status(200).json({ msg: "Data Berhasil Diubah" });
     } catch (error) {
         console.log("Terjadi kesalahan", e)
         return res.status(500).json({ msg: "terjadi kesalahan pada server" })
     }
 }
 
-export const updateSiswa = async (req, res) => {
-    const { nama } = req.body
+export const deleteUser = async (req, res) => {
     const { id } = req.params
     try {
-        await query("UPDATE siswa SET nama=? where id=?", [nama, id])
-        return res.status(200).json({ msg: "Siswa Diubah" })
+        await query("DELETE FROM users where id=?", [id])
+        return res.status(200).json({ msg: "user Dihapus" })
     } catch (error) {
-        console.log("Terjadi kesalahan", e)
-        return res.status(500).json({ msg: "terjadi kesalahan pada server" })
-    }
-}
-
-export const deleteSiswa = async (req, res) => {
-    const { id } = req.params
-    try {
-        await query("DELETE FROM siswa where id=?", [id])
-        return res.status(200).json({ msg: "Siswa Dihapus" })
-    } catch (error) {
-        console.log("Terjadi kesalahan", e)
-        return res.status(500).json({ msg: "terjadi kesalahan pada server" })
-    }
-}
-
-export const getSiswaById = async (req, res) => {
-    const { id } = req.params
-    try {
-        const result = await query('Select * from siswa where id=?', [id])
-        return res.status(200).json({ success: true, data: result })
-    } catch (e) {
-        console.log("Terjadi kesalahan", e)
-        return res.status(500).json({ msg: "terjadi kesalahan pada server" })
-    }
-}
-
-export const getSiswaTest = async (req, res) => {
-    const { id, nama } = req.query
-    console.log(id, nama)
-    console.log("TERPANGGIL")
-    try {
-        const result = await query('Select * from siswa where id=?', [id, nama])
-        return res.status(200).json({ success: true, data: result })
-    } catch (e) {
         console.log("Terjadi kesalahan", e)
         return res.status(500).json({ msg: "terjadi kesalahan pada server" })
     }
